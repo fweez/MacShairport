@@ -14,6 +14,7 @@
 {
 @private
     NSWindow *window;
+    MSShairportServer *server;
 }
 
 @property (assign) IBOutlet NSWindow *window;

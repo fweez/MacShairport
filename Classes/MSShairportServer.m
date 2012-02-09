@@ -87,7 +87,7 @@ static SSCrypto *crypto = nil;
 #pragma mark NSNetServiceDelegate
 
 - (void)netServiceDidPublish:(NSNetService *)sender {
-	DebugLog(@"Published: %@: %lu", [sender type], [sender port]);
+	DebugLog(@"Published: %@: %lu", [sender type], (unsigned long)[sender port]);
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
@@ -165,9 +165,8 @@ static SSCrypto *crypto = nil;
 	address.sin6_scope_id = 0;
 	
 	CFDataRef addressData = CFDataCreate(NULL, (const UInt8 *)&address, sizeof(address));
-	[(id) addressData autorelease];
-	
 	CFSocketError error = CFSocketSetAddress(listeningSocket, addressData);
+    CFRelease(addressData);
 	if(error != kCFSocketSuccess) {
 		DebugLog(@"Unable to set the socket address.");
 		
@@ -257,7 +256,7 @@ static void serverAcceptCallback(CFSocketRef socket, CFSocketCallBackType type, 
 	
 	[responseString appendFormat:@"\r\n"];
 	
-	DebugLog(@"Response: %@", responseString);
+	//DebugLog(@"Response: %@", responseString);
 	
 	[connection sendResponse:[responseString dataUsingEncoding:NSUTF8StringEncoding]];
 	
@@ -326,6 +325,7 @@ static void serverAcceptCallback(CFSocketRef socket, CFSocketCallBackType type, 
 	NSString *path = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"hairtunes"];
 	NSTask *task = [[NSTask alloc] init];
 	[task setLaunchPath:path];
+    
 	
 	NSArray *arguments = [NSArray arrayWithObjects:@"tport", tport, @"iv", iv, @"cport", cport, @"fmtp", connection.fmtp, @"dport", dport, @"key", key, nil];
 	[task setArguments:arguments];
@@ -362,7 +362,7 @@ static void serverAcceptCallback(CFSocketRef socket, CFSocketCallBackType type, 
 			break;
 		}
 		
-		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
+		[[NSRunLoop currentRunLoop] run];
 	}
 		
 	[response setObject:@"DEADBEEF" forKey:@"Session"];
