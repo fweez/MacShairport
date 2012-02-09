@@ -1,3 +1,5 @@
+This fork has 32-bit compiled binary blobs, and a small bit of hacking to get it to compile on 10.6. Otherwise identical to the original.
+
 # MacShairport
 [Shairport](https://github.com/albertz/shairport) is this great thing that lets a computer pretend to be an Airport Express speaker. That means one computer can send audio from its iTunes to be played on another computer. Awesome, right? Except the Shairport server itself is written in Perl and has dependencies that make it hard for normal people to use and install.
 
